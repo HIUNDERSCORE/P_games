@@ -11,6 +11,7 @@ import { createBareServer } from '@tomphttp/bare-server-node';
 const app = express();
 const bare = createBareServer('/bare/');
 const server = createServer();
+app.get('/health', (req, res) => res.status(200).send('OK'));
 
 app.use(express.static('public'));
 app.use('/uv/', express.static(uvPath));
