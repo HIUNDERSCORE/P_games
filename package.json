@@ -1,6 +1,13 @@
-"dependencies": {
-  "@titaniumnetwork-dev/ultraviolet": "^3.2.10",
-  "@tomphttp/bare-server-node": "^2.0.6",
-  "express": "^4.21.0",
-  "compression": "^1.7.4"
+{
+  "name": "eco-proxy-2026",
+  "version": "3.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node index.mjs"
+  },
+  "dependencies": {
+    "@titaniumnetwork-dev/ultraviolet": "^3.2.10",
+    "@tomphttp/bare-server-node": "^2.0.6",
+    "express": "^4.21.0"
+  }
 }
