@@ -2,20 +2,20 @@ import express from 'express';
 import { createServer } from 'node:http';
 import { uvPath } from '@titaniumnetwork-dev/ultraviolet';
 import { createBareServer } from '@tomphttp/bare-server-node';
-import { join } from 'node:path';
 
 const app = express();
 const bare = createBareServer('/bare/');
 const server = createServer();
 
-// Static files
+// This serves your HTML files
 app.use(express.static('public'));
+
+// This fixes the "Cannot GET /uv/..." error by serving the engine scripts
 app.use('/uv/', express.static(uvPath));
 
-// Health check for Koyeb
+// Health Check for Koyeb (Fixes "Route Required" and Scaling errors)
 app.get('/health', (req, res) => res.status(200).send('OK'));
 
-// Routing Logic
 server.on('request', (req, res) => {
     if (bare.shouldRoute(req)) {
         bare.route(req, res);
@@ -32,7 +32,6 @@ server.on('upgrade', (req, socket, head) => {
     }
 });
 
-const port = process.env.PORT || 8080;
-server.listen(port, '0.0.0.0', () => {
-    console.log(`Proxy running on port ${port}`);
+server.listen(process.env.PORT || 8080, '0.0.0.0', () => {
+    console.log('Server is live on port 8080');
 });
