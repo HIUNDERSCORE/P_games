@@ -7,13 +7,8 @@ const app = express();
 const bare = createBareServer('/bare/');
 const server = createServer();
 
-// This serves your HTML files
 app.use(express.static('public'));
-
-// This fixes the "Cannot GET /uv/..." error by serving the engine scripts
 app.use('/uv/', express.static(uvPath));
-
-// Health Check for Koyeb (Fixes "Route Required" and Scaling errors)
 app.get('/health', (req, res) => res.status(200).send('OK'));
 
 server.on('request', (req, res) => {
@@ -32,6 +27,4 @@ server.on('upgrade', (req, socket, head) => {
     }
 });
 
-server.listen(process.env.PORT || 8080, '0.0.0.0', () => {
-    console.log('Server is live on port 8080');
-});
+server.listen(process.env.PORT || 8080, '0.0.0.0');
