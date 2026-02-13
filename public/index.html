@@ -3,42 +3,30 @@
 <head>
     <title>Google Drive</title>
     <style>
-        body { background: #000; color: #0f0; font-family: monospace; text-align: center; margin: 0; overflow: hidden; }
-        
-        /* The Password Screen */
-        #locker {
-            position: fixed; inset: 0; background: #000; z-index: 1000;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-        }
-        
-        /* The Actual Site (Hidden by default) */
-        #main-site { display: none; padding: 20px; }
-        
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; max-width: 600px; margin: 30px auto; }
-        .card { background: #111; border: 1px solid #333; padding: 20px; cursor: pointer; border-radius: 8px; }
-        .card:hover { border-color: #0f0; }
-        
-        input { padding: 12px; background: #111; color: #0f0; border: 1px solid #0f0; margin: 10px; width: 250px; }
-        button { padding: 12px 24px; background: #0f0; color: #000; border: none; cursor: pointer; font-weight: bold; }
+        body { background: #000; color: #0f0; font-family: monospace; text-align: center; margin: 0; }
+        #locker { position: fixed; inset: 0; background: #000; z-index: 99; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        #main { display: none; padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-width: 500px; margin: 20px auto; }
+        .card { background: #111; border: 1px solid #0f0; padding: 15px; cursor: pointer; }
+        input { padding: 10px; background: #111; color: #0f0; border: 1px solid #0f0; }
+        button { padding: 10px; background: #0f0; color: #000; border: none; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
-
     <div id="locker">
-        <h2>ENTER ACCESS KEY</h2>
-        <input type="password" id="passInput" placeholder="Password...">
-        <button onclick="checkPass()">LOGIN</button>
-        <p id="err" style="color: red; display: none;">INCORRECT KEY</p>
+        <h1>ACCESS RESTRICTED</h1>
+        <input type="password" id="pw" placeholder="Password...">
+        <button onclick="unlock()">ENTER</button>
     </div>
 
-    <div id="main-site">
-        <h1>SYSTEM ONLINE: <span id="st" style="color:orange">BOOTING...</span></h1>
-        <input id="url" placeholder="Search or Enter URL">
-        <button onclick="launch()">LAUNCH</button>
-
+    <div id="main">
+        <h1>PROXY v3</h1>
+        <p>Status: <span id="st" style="color:orange">BOOTING...</span></p>
+        <input id="url" placeholder="Search or URL...">
+        <button onclick="launch()">GO</button>
         <div class="grid">
             <div class="card" onclick="g('https://now.gg/apps/scott-cawthon/51750/five-nights-at-freddy-s.html')">FNAF 6</div>
-            <div class="card" onclick="g('https://https://www.easyfun.gg/cloud-games/roblox.html)">ROBLOX</div>
+            <div class="card" onclick="g('https://easyfun.gg/roblox')">ROBLOX</div>
             <div class="card" onclick="g('https://slope-game.github.io/')">SLOPE</div>
             <div class="card" onclick="g('https://precisionclient.pages.dev/')">MINECRAFT</div>
         </div>
@@ -47,38 +35,34 @@
     <script src="/uv/uv.bundle.js"></script>
     <script src="/uv/uv.config.js"></script>
     <script>
-        // 1. PASSWORD LOGIC
-        function checkPass() {
-            const input = document.getElementById('passInput').value;
-            const KEY = "123four"; // <--- CHANGE YOUR PASSWORD HERE
-            
-            if (input === KEY) {
+        function unlock() {
+            if (document.getElementById('pw').value === "123four") {
                 document.getElementById('locker').style.display = "none";
-                document.getElementById('main-site').style.display = "block";
-                document.body.style.overflow = "auto";
-            } else {
-                document.getElementById('err').style.display = "block";
+                document.getElementById('main').style.display = "block";
             }
         }
 
-        // 2. PROXY LOGIC
+        window.__uv$config = {
+            prefix: '/uv/service/',
+            bare: '/bare/',
+            encodeUrl: (url) => btoa(url), 
+            decodeUrl: (url) => atob(url),
+            handler: '/uv/uv.handler.js',
+            bundle: '/uv/uv.bundle.js',
+            config: '/uv/uv.config.js',
+            sw: '/uv/uv.sw.js',
+        };
+
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/uv/sw.js', { scope: '/uv/service/' })
-                .then(() => {
-                    document.getElementById('st').innerText = "READY";
-                    document.getElementById('st').style.color = "lime";
-                });
-            });
+            navigator.serviceWorker.register('/uv/sw.js', { scope: '/uv/service/' })
+                .then(() => document.getElementById('st').innerText = "READY");
         }
 
         function launch() {
             let val = document.getElementById('url').value;
-            if (!val) return;
             if (!val.startsWith('http')) val = 'https://' + val;
             window.location.href = "/uv/service/" + btoa(val);
         }
-
         function g(u) { window.location.href = "/uv/service/" + btoa(u); }
     </script>
 </body>
