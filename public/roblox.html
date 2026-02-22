@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Drive</title>
+    <style>
+        body { background: #000; color: #0f0; font-family: monospace; text-align: center; margin: 0; }
+        #locker { position: fixed; inset: 0; background: #000; z-index: 99; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        #main { display: none; padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-width: 500px; margin: 20px auto; }
+        .card { background: #111; border: 1px solid #0f0; padding: 15px; cursor: pointer; }
+        input { padding: 10px; background: #111; color: #0f0; border: 1px solid #0f0; }
+        button { padding: 10px; background: #0f0; color: #000; border: none; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div id="main">
+        <h1>PROXY v3</h1>
+        <p>Status: <span id="st" style="color:orange">BOOTING...</span></p>
+        <input id="url" placeholder="Search or URL...">
+        <button onclick="launch()">GO</button>
+      <iframe src="https://cdn.now.gg/html5-games/com.nowgg.h5.pub501.app51750/five-nights-at-freddy-s/index.html">  
+      </iframe> 
+    <script src="/uv/uv.bundle.js"></script>
+    <script src="/uv/uv.config.js"></script>
+    <script>
+        function unlock() {
+            if (document.getElementById('pw').value === "123four") {
+                document.getElementById('locker').style.display = "none";
+                document.getElementById('main').style.display = "block";
+            }
+        }
+
+        window.__uv$config = {
+            prefix: '/uv/service/',
+            bare: '/bare/',
+            encodeUrl: (url) => btoa(url), 
+            decodeUrl: (url) => atob(url),
+            handler: '/uv/uv.handler.js',
+            bundle: '/uv/uv.bundle.js',
+            config: '/uv/uv.config.js',
+            sw: '/uv/uv.sw.js',
+        };
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/uv/sw.js', { scope: '/uv/service/' })
+                .then(() => document.getElementById('st').innerText = "READY");
+        }
+
+        function launch() {
+            let val = document.getElementById('url').value;
+            if (!val.startsWith('http')) val = 'https://' + val;
+            window.location.href = "/uv/service/" + btoa(val);
+        }
+        function g(u) { window.location.href =  u; }
+    </script>
+</body>
+</html>
